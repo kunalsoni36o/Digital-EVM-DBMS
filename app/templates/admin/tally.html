@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Live Tally – {{ election.title }}{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">📊 Live Tally: {{ election.title }}</h1>
+  <p><span class="badge badge-{{ election.status }}">{{ election.status|title }}</span></p>
+
+  {% if turnout %}
+  <div class="card stats-row">
+    <div class="stat"><span class="stat-num">{{ turnout.votes_cast }}</span><span class="stat-label">Votes Cast</span></div>
+    <div class="stat"><span class="stat-num">{{ turnout.eligible_voters }}</span><span class="stat-label">Eligible</span></div>
+    <div class="stat"><span class="stat-num">{{ turnout.turnout_percent }}%</span><span class="stat-label">Turnout</span></div>
+  </div>
+  {% endif %}
+
+  {% for cid, data in grouped.items() %}
+  <div class="card mt-2">
+    <h2 class="card-title">{{ data.name }}</h2>
+    <table class="table">
+      <thead><tr><th>Candidate</th><th>Party</th><th>Votes</th></tr></thead>
+      <tbody>
+        {% for row in data.candidates %}
+        <tr>
+          <td>{{ row.candidate_name }}</td>
+          <td><span class="badge">{{ row.party }}</span></td>
+          <td><strong>{{ row.votes }}</strong></td>
+        </tr>
+        {% endfor %}
+        <tr class="nota-row">
+          <td><em>NOTA</em></td><td>—</td><td>{{ data.nota_votes }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <div class="mt-2">
+    <a href="{{ url_for('admin.election_detail', election_id=election.election_id) }}" class="btn btn-secondary">← Back</a>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Audit Log{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">📋 Audit Log</h1>
+
+  <!-- Filter -->
+  <div class="card filter-bar">
+    <form method="get" action="{{ url_for('admin.audit_log') }}" class="filter-form">
+      <div class="form-group inline">
+        <label for="actor_type">Actor Type</label>
+        <select id="actor_type" name="actor_type" class="form-control">
+          <option value="">All</option>
+          {% for at in ['admin','voter','system'] %}
+          <option value="{{ at }}" {{ 'selected' if actor_type == at }}>{{ at|title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      <a href="{{ url_for('admin.audit_log') }}" class="btn btn-link">Clear</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <table class="table">
+      <thead>
+        <tr><th>Time</th><th>Actor</th><th>ID</th><th>Action</th><th>Entity</th><th>Details</th><th>IP</th></tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td class="text-muted small">{{ log.created_at.strftime('%d %b %Y %H:%M:%S') }}</td>
+          <td><span class="badge badge-{{ log.actor_type }}">{{ log.actor_type }}</span></td>
+          <td>{{ log.actor_id or '—' }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.entity or '—' }} {{ ('#' ~ log.entity_id) if log.entity_id else '' }}</td>
+          <td class="text-muted small">{{ log.details or '—' }}</td>
+          <td class="text-muted small monospace">{{ log.ip_address or '—' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty-cell">No audit logs found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="{{ url_for('admin.audit_log', page=page-1, actor_type=actor_type) }}" class="btn btn-secondary btn-xs">← Prev</a>
+      {% endif %}
+      <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+      {% if page < total_pages %}
+        <a href="{{ url_for('admin.audit_log', page=page+1, actor_type=actor_type) }}" class="btn btn-secondary btn-xs">Next →</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

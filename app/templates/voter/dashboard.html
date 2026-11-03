@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Welcome, {{ voter.full_name }}</h1>
+    <p class="text-muted">EPIC: <span class="monospace">{{ voter.epic_no }}</span> &bull; Constituency: <strong>{{ voter.constituency_name }}</strong></p>
+  </div>
+
+  <!-- Active Elections -->
+  <section>
+    <h2 class="section-heading">Active Elections</h2>
+    {% if active %}
+      <div class="card-list">
+        {% for el in active %}
+        <div class="card card-row">
+          <div>
+            <h3>{{ el.title }}</h3>
+            <p class="text-muted small">
+              Voting ends: {{ el.end_time.strftime('%d %b %Y, %I:%M %p') }}
+            </p>
+          </div>
+          {% if el.has_voted %}
+            <span class="badge badge-success">✅ Already Voted</span>
+          {% else %}
+            <a href="{{ url_for('voter.ballot', election_id=el.election_id) }}" class="btn btn-primary">Vote Now</a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state"><p>No active elections right now.</p></div>
+    {% endif %}
+  </section>
+
+  <!-- Upcoming Elections -->
+  {% if upcoming %}
+  <section class="mt-2">
+    <h2 class="section-heading">Upcoming Elections</h2>
+    <div class="card-list">
+      {% for el in upcoming %}
+      <div class="card card-row">
+        <div>
+          <h3>{{ el.title }}</h3>
+          <p class="text-muted small">Starts: {{ el.start_time.strftime('%d %b %Y, %I:%M %p') }}</p>
+        </div>
+        <span class="badge badge-{{ el.status }}">{{ el.status|title }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Closed Elections -->
+  {% if closed %}
+  <section class="mt-2">
+    <h2 class="section-heading">Past Elections</h2>
+    <div class="card-list">
+      {% for el in closed %}
+      <div class="card card-row">
+        <div>
+          <h3>{{ el.title }}</h3>
+          <p class="text-muted small">Ended: {{ el.end_time.strftime('%d %b %Y') }}</p>
+        </div>
+        <span class="badge badge-closed">Closed</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}
+

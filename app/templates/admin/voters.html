@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Manage Voters{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">Manage Voters</h1>
+
+  <!-- Filter/Search -->
+  <div class="card filter-bar">
+    <form method="get" action="{{ url_for('admin.voters') }}" class="filter-form">
+      <div class="form-group inline">
+        <label for="status">Status</label>
+        <select id="status" name="status" class="form-control">
+          <option value="">All</option>
+          {% for s in ['pending','approved','rejected','blocked'] %}
+          <option value="{{ s }}" {{ 'selected' if status_filter == s }}>{{ s|title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group inline">
+        <label for="q">Search</label>
+        <input type="text" id="q" name="q" class="form-control" placeholder="EPIC or name" value="{{ search }}">
+      </div>
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      <a href="{{ url_for('admin.voters') }}" class="btn btn-link">Clear</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <th>EPIC</th><th>Name</th><th>Constituency</th>
+          <th>Status</th><th>Registered</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in voters %}
+        <tr>
+          <td class="monospace">{{ v.epic_no }}</td>
+          <td>{{ v.full_name }}</td>
+          <td>{{ v.constituency_name }}</td>
+          <td><span class="badge badge-{{ v.status }}">{{ v.status|title }}</span></td>
+          <td class="text-muted small">{{ v.created_at.strftime('%d %b %Y') }}</td>
+          <td class="action-cell">
+            {% if v.status == 'pending' %}
+              <form method="post" action="{{ url_for('admin.voter_action', voter_id=v.voter_id) }}" class="inline-form">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="approve">
+                <button type="submit" class="btn btn-success btn-xs">Approve</button>
+              </form>
+              <form method="post" action="{{ url_for('admin.voter_action', voter_id=v.voter_id) }}" class="inline-form">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="reject">
+                <button type="submit" class="btn btn-danger btn-xs"
+                        data-confirm="Reject this voter?">Reject</button>
+              </form>
+            {% elif v.status == 'approved' %}
+              <form method="post" action="{{ url_for('admin.voter_action', voter_id=v.voter_id) }}" class="inline-form">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="block">
+                <button type="submit" class="btn btn-warning btn-xs"
+                        data-confirm="Block this voter?">Block</button>
+              </form>
+            {% elif v.status == 'blocked' %}
+              <form method="post" action="{{ url_for('admin.voter_action', voter_id=v.voter_id) }}" class="inline-form">
+                {{ csrf_field() }}
+                <input type="hidden" name="action" value="unblock">
+                <button type="submit" class="btn btn-success btn-xs">Unblock</button>
+              </form>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="empty-cell">No voters found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

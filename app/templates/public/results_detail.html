@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ election.title }} – Results{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">{{ election.title }}</h1>
+  {% if election.description %}<p class="text-muted">{{ election.description }}</p>{% endif %}
+
+  {% if turnout %}
+  <div class="card stats-row">
+    <div class="stat"><span class="stat-num">{{ turnout.votes_cast }}</span><span class="stat-label">Votes Cast</span></div>
+    <div class="stat"><span class="stat-num">{{ turnout.eligible_voters }}</span><span class="stat-label">Eligible Voters</span></div>
+    <div class="stat"><span class="stat-num">{{ turnout.turnout_percent }}%</span><span class="stat-label">Turnout</span></div>
+  </div>
+  {% endif %}
+
+  {% for cid, data in constituencies.items() %}
+  <div class="card mt-2">
+    <h2 class="card-title">{{ data.name }}</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Candidate</th>
+          <th>Party</th>
+          <th>Votes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data.candidates %}
+        <tr class="{{ 'winner-row' if row.pos == 1 }}">
+          <td>{{ '🏆' if row.pos == 1 else row.pos }}</td>
+          <td>{{ row.candidate_name }}</td>
+          <td><span class="badge">{{ row.party }}</span></td>
+          <td><strong>{{ row.votes }}</strong></td>
+        </tr>
+        {% endfor %}
+        <tr class="nota-row">
+          <td>—</td>
+          <td><em>NOTA (None of the Above)</em></td>
+          <td>—</td>
+          <td>{{ data.nota_votes }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+
+  <div class="mt-2">
+    <a href="{{ url_for('public.results') }}" class="btn btn-secondary">← Back to Results</a>
+  </div>
+</div>
+{% endblock %}
+

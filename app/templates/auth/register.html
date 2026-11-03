@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <h1 class="page-title">Register to Vote</h1>
+  <div class="card">
+    <form method="post" action="{{ url_for('auth.register') }}" novalidate>
+      {{ csrf_field() }}
+
+      <div class="form-group">
+        <label for="epic_no">EPIC Number <span class="required">*</span></label>
+        <input type="text" id="epic_no" name="epic_no" class="form-control monospace"
+               placeholder="ABC1234567" maxlength="10" required
+               pattern="[A-Za-z]{3}[0-9]{7}">
+        <span class="form-hint">3 letters + 7 digits, e.g. ABC1234567</span>
+      </div>
+
+      <div class="form-group">
+        <label for="full_name">Full Name <span class="required">*</span></label>
+        <input type="text" id="full_name" name="full_name" class="form-control"
+               placeholder="Your full name" maxlength="100" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dob">Date of Birth <span class="required">*</span></label>
+          <input type="date" id="dob" name="dob" class="form-control" required>
+          <span class="form-hint">Must be 18 or older.</span>
+        </div>
+        <div class="form-group">
+          <label for="gender">Gender <span class="required">*</span></label>
+          <select id="gender" name="gender" class="form-control" required>
+            <option value="">— Select —</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email" class="form-control"
+               placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" class="form-control"
+               placeholder="Optional" maxlength="15">
+      </div>
+
+      <div class="form-group">
+        <label for="constituency_id">Constituency <span class="required">*</span></label>
+        <select id="constituency_id" name="constituency_id" class="form-control" required>
+          <option value="">— Select your constituency —</option>
+          {% for c in constituencies %}
+            <option value="{{ c.constituency_id }}">{{ c.name }} ({{ c.state }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password <span class="required">*</span></label>
+        <input type="password" id="password" name="password" class="form-control"
+               placeholder="Min 8 chars, letters + digits" required minlength="8">
+        <div id="pw-strength" class="pw-strength" aria-live="polite"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirm Password <span class="required">*</span></label>
+        <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+               placeholder="Repeat your password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Register</button>
+      <p class="form-footer">Already have an account? <a href="{{ url_for('auth.voter_login') }}">Log in</a></p>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

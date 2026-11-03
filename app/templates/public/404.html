@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+<div class="container page-narrow error-page">
+  <h1>404</h1>
+  <p>The page you're looking for doesn't exist or has been moved.</p>
+  <a href="{{ url_for('public.home') }}" class="btn btn-primary">Go Home</a>
+</div>
+{% endblock %}
+

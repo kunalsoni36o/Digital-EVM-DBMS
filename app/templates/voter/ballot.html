@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Ballot – {{ election.title }}{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <h1 class="page-title">🗳️ {{ election.title }}</h1>
+  <p class="text-muted">Select one candidate below, or choose NOTA (None of the Above).</p>
+  <p class="text-muted small">Voting closes: {{ election.end_time.strftime('%d %b %Y, %I:%M %p') }}</p>
+
+  <form method="post" action="{{ url_for('voter.vote', election_id=election.election_id) }}"
+        id="ballotForm">
+    {{ csrf_field() }}
+
+    <div class="ballot-grid">
+      {% for cand in candidates %}
+      <label class="candidate-card" for="cand_{{ cand.candidate_id }}">
+        <input type="radio" name="candidate_id" id="cand_{{ cand.candidate_id }}"
+               value="{{ cand.candidate_id }}" required>
+        <div class="candidate-photo-wrap">
+          {% if cand.photo_path %}
+            <img src="{{ url_for('static', filename=cand.photo_path) }}"
+                 alt="{{ cand.full_name }}" class="candidate-photo" loading="lazy">
+          {% else %}
+            <div class="candidate-photo-placeholder">👤</div>
+          {% endif %}
+        </div>
+        <div class="candidate-info">
+          <strong>{{ cand.full_name }}</strong>
+          <span class="candidate-party">{{ cand.party_name }}</span>
+          {% if cand.symbol %}<span class="candidate-symbol">Symbol: {{ cand.symbol }}</span>{% endif %}
+          <span class="badge">{{ cand.party_short }}</span>
+        </div>
+      </label>
+      {% endfor %}
+
+      <!-- NOTA option (always last) -->
+      <label class="candidate-card nota-card" for="cand_nota">
+        <input type="radio" name="candidate_id" id="cand_nota" value="NOTA" required>
+        <div class="candidate-photo-wrap">
+          <div class="candidate-photo-placeholder nota-icon">⊘</div>
+        </div>
+        <div class="candidate-info">
+          <strong>NOTA</strong>
+          <span class="candidate-party">None of the Above</span>
+          <span class="form-hint">Your vote will be recorded but not counted for any candidate.</span>
+        </div>
+      </label>
+    </div>
+
+    <!-- noscript fallback: plain submit without JS confirm -->
+    <noscript>
+      <button type="submit" class="btn btn-primary btn-lg btn-full mt-2">
+        Confirm Vote
+      </button>
+    </noscript>
+
+    <!-- JS confirm button (hidden when JS is off) -->
+    <button type="submit" class="btn btn-primary btn-lg btn-full mt-2"
+            data-confirm="Are you sure you want to cast this vote? This action cannot be undone."
+            id="submitBallot">
+      Confirm Vote
+    </button>
+  </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if election else 'New' }} Election{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <h1 class="page-title">{{ 'Edit' if election else 'Create' }} Election</h1>
+  <div class="card">
+    <form method="post" action="{{ url_for('admin.election_edit', election_id=election.election_id) if election else url_for('admin.election_new') }}">
+      {{ csrf_field() }}
+
+      <div class="form-group">
+        <label for="title">Title <span class="required">*</span></label>
+        <input type="text" id="title" name="title" class="form-control"
+               value="{{ election.title if election else '' }}" required maxlength="150">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" class="form-control" rows="3">{{ election.description if election else '' }}</textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="start_time">Start Time <span class="required">*</span></label>
+          <input type="datetime-local" id="start_time" name="start_time" class="form-control"
+                 value="{{ election.start_time.strftime('%Y-%m-%dT%H:%M') if election else '' }}" required>
+        </div>
+        <div class="form-group">
+          <label for="end_time">End Time <span class="required">*</span></label>
+          <input type="datetime-local" id="end_time" name="end_time" class="form-control"
+                 value="{{ election.end_time.strftime('%Y-%m-%dT%H:%M') if election else '' }}" required>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ 'Update' if election else 'Create Election' }}</button>
+        <a href="{{ url_for('admin.elections') }}" class="btn btn-link">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

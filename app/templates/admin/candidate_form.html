@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Add Candidate – {{ election.title }}{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <h1 class="page-title">Add Candidate</h1>
+  <p class="text-muted">Election: <strong>{{ election.title }}</strong></p>
+
+  <div class="card">
+    <form method="post" action="{{ url_for('admin.candidate_add', election_id=election.election_id) }}"
+          enctype="multipart/form-data">
+      {{ csrf_field() }}
+
+      <div class="form-group">
+        <label for="full_name">Full Name <span class="required">*</span></label>
+        <input type="text" id="full_name" name="full_name" class="form-control" maxlength="100" required>
+      </div>
+
+      <div class="form-group">
+        <label for="constituency_id">Constituency <span class="required">*</span></label>
+        <select id="constituency_id" name="constituency_id" class="form-control" required>
+          <option value="">— Select —</option>
+          {% for c in constituencies %}
+          <option value="{{ c.constituency_id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="party_id">Party</label>
+        <select id="party_id" name="party_id" class="form-control">
+          <option value="">Independent</option>
+          {% for p in parties %}
+          <option value="{{ p.party_id }}">{{ p.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Candidate Photo (Optional)</label>
+        <input type="file" id="photo" name="photo" class="form-control"
+               accept=".png,.jpg,.jpeg,.webp">
+        <span class="form-hint">Max {{ config.MAX_UPLOAD_MB if config else 2 }} MB. PNG, JPG or WEBP.</span>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Add Candidate</button>
+        <a href="{{ url_for('admin.election_detail', election_id=election.election_id) }}" class="btn btn-link">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+

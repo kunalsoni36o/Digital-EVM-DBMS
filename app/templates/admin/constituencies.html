@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Constituencies{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">🗺️ Constituencies</h1>
+
+  <!-- Add form -->
+  <div class="card">
+    <h2 class="card-title">Add Constituency</h2>
+    <form method="post" action="{{ url_for('admin.constituency_add') }}" class="inline-grid-form">
+      {{ csrf_field() }}
+      <div class="form-group"><label for="code">Code</label>
+        <input type="text" id="code" name="code" class="form-control" placeholder="MUM-N" maxlength="10" required></div>
+      <div class="form-group"><label for="name">Name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Mumbai North" maxlength="100" required></div>
+      <div class="form-group"><label for="state">State</label>
+        <input type="text" id="state" name="state" class="form-control" placeholder="Maharashtra" maxlength="60" required></div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+  </div>
+
+  <!-- List -->
+  <div class="card mt-2">
+    <table class="table">
+      <thead><tr><th>Code</th><th>Name</th><th>State</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in constituencies %}
+        <tr>
+          <td class="monospace">{{ c.code }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.state }}</td>
+          <td class="action-cell">
+            <!-- Edit inline -->
+            <details class="edit-details">
+              <summary class="btn btn-secondary btn-xs">Edit</summary>
+              <form method="post" action="{{ url_for('admin.constituency_edit', cid=c.constituency_id) }}" class="edit-form">
+                {{ csrf_field() }}
+                <input type="text" name="name" value="{{ c.name }}" class="form-control" required>
+                <input type="text" name="state" value="{{ c.state }}" class="form-control" required>
+                <button type="submit" class="btn btn-primary btn-xs">Save</button>
+              </form>
+            </details>
+            <form method="post" action="{{ url_for('admin.constituency_delete', cid=c.constituency_id) }}" class="inline-form">
+              {{ csrf_field() }}
+              <button type="submit" class="btn btn-danger btn-xs"
+                      data-confirm="Delete constituency '{{ c.name }}'?">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="empty-cell">No constituencies found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

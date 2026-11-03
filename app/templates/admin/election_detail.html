@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ election.title }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ election.title }}</h1>
+      {% if election.description %}<p class="text-muted">{{ election.description }}</p>{% endif %}
+      <p class="text-muted small">
+        {{ election.start_time.strftime('%d %b %Y %H:%M') }} → {{ election.end_time.strftime('%d %b %Y %H:%M') }}
+      </p>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-{{ election.status }} badge-lg">{{ election.status|title }}</span>
+      {% if election.results_published %}<span class="badge badge-success">Results Published</span>{% endif %}
+    </div>
+  </div>
+
+  <!-- Status Transition Buttons -->
+  <div class="card action-bar">
+    {% if election.status == 'draft' %}
+      <a href="{{ url_for('admin.election_edit', election_id=election.election_id) }}" class="btn btn-secondary">Edit</a>
+      <form method="post" action="{{ url_for('admin.election_status', election_id=election.election_id) }}" class="inline-form">
+        {{ csrf_field() }}
+        <input type="hidden" name="new_status" value="scheduled">
+        <button type="submit" class="btn btn-primary"
+                data-confirm="Schedule this election? No more candidates can be added after this.">
+          Schedule Election
+        </button>
+      </form>
+      <a href="{{ url_for('admin.candidate_add', election_id=election.election_id) }}" class="btn btn-secondary">+ Add Candidate</a>
+    {% elif election.status == 'scheduled' %}
+      <form method="post" action="{{ url_for('admin.election_status', election_id=election.election_id) }}" class="inline-form">
+        {{ csrf_field() }}
+        <input type="hidden" name="new_status" value="active">
+        <button type="submit" class="btn btn-primary"
+                data-confirm="Activate this election now?">Activate Now</button>
+      </form>
+    {% elif election.status == 'active' %}
+      <form method="post" action="{{ url_for('admin.election_status', election_id=election.election_id) }}" class="inline-form">
+        {{ csrf_field() }}
+        <input type="hidden" name="new_status" value="closed">
+        <button type="submit" class="btn btn-danger"
+                data-confirm="Close this election? Voting will stop immediately.">Close Election</button>
+      </form>
+      <a href="{{ url_for('admin.tally', election_id=election.election_id) }}" class="btn btn-secondary">Live Tally</a>
+    {% elif election.status == 'closed' and not election.results_published %}
+      <form method="post" action="{{ url_for('admin.election_publish', election_id=election.election_id) }}" class="inline-form">
+        {{ csrf_field() }}
+        <button type="submit" class="btn btn-primary"
+                data-confirm="Publish results? This cannot be undone.">Publish Results</button>
+      </form>
+      <a href="{{ url_for('admin.tally', election_id=election.election_id) }}" class="btn btn-secondary">Final Tally</a>
+    {% endif %}
+    <a href="{{ url_for('admin.elections') }}" class="btn btn-link">← Back</a>
+  </div>
+
+  <!-- Candidates grouped by constituency -->
+  <div class="card mt-2">
+    <h2 class="card-title">Candidates</h2>
+    {% if grouped %}
+      {% for cid, data in grouped.items() %}
+      <h3 class="constituency-heading">{{ data.name }}</h3>
+      <table class="table table-compact">
+        <thead><tr><th>Name</th><th>Party</th><th>Photo</th>{% if election.status == 'draft' %}<th>Action</th>{% endif %}</tr></thead>
+        <tbody>
+          {% for c in data.candidates %}
+          <tr>
+            <td>{{ c.full_name }}</td>
+            <td>{{ c.party_name }}</td>
+            <td>
+              {% if c.photo_path %}
+                <img src="{{ url_for('static', filename=c.photo_path) }}" alt="{{ c.full_name }}" class="candidate-thumb">
+              {% else %}—{% endif %}
+            </td>
+            {% if election.status == 'draft' %}
+            <td>
+              <form method="post"
+                    action="{{ url_for('admin.candidate_delete', election_id=election.election_id, candidate_id=c.candidate_id) }}"
+                    class="inline-form">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger btn-xs"
+                        data-confirm="Remove {{ c.full_name }}?">Remove</button>
+              </form>
+            </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state"><p>No candidates added yet.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

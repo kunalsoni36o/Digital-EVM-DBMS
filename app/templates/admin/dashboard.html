@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="page-title">⚙️ Admin Dashboard</h1>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Voters</h3>
+      <div class="stat-row"><span>Pending</span><span class="badge badge-pending">{{ voter_counts.pending or 0 }}</span></div>
+      <div class="stat-row"><span>Approved</span><span class="badge badge-success">{{ voter_counts.approved or 0 }}</span></div>
+      <div class="stat-row"><span>Rejected</span><span class="badge badge-error">{{ voter_counts.rejected or 0 }}</span></div>
+      <div class="stat-row"><span>Blocked</span><span class="badge badge-warning">{{ voter_counts.blocked or 0 }}</span></div>
+      <a href="{{ url_for('admin.voters') }}" class="btn btn-secondary btn-sm mt-1">Manage Voters</a>
+    </div>
+    <div class="stat-card">
+      <h3>Elections</h3>
+      <div class="stat-row"><span>Draft</span><span class="badge">{{ election_counts.draft or 0 }}</span></div>
+      <div class="stat-row"><span>Scheduled</span><span class="badge badge-pending">{{ election_counts.scheduled or 0 }}</span></div>
+      <div class="stat-row"><span>Active</span><span class="badge badge-success">{{ election_counts.active or 0 }}</span></div>
+      <div class="stat-row"><span>Closed</span><span class="badge badge-closed">{{ election_counts.closed or 0 }}</span></div>
+      <a href="{{ url_for('admin.elections') }}" class="btn btn-secondary btn-sm mt-1">Manage Elections</a>
+    </div>
+    <div class="stat-card">
+      <h3>Total Votes Cast</h3>
+      <span class="stat-big">{{ total_votes }}</span>
+    </div>
+  </div>
+
+  <div class="card mt-2">
+    <h2 class="card-title">Recent Audit Activity</h2>
+    <table class="table">
+      <thead>
+        <tr><th>Time</th><th>Actor</th><th>Action</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        {% for log in recent_audit %}
+        <tr>
+          <td class="text-muted small">{{ log.created_at.strftime('%d %b %H:%M') }}</td>
+          <td><span class="badge badge-{{ log.actor_type }}">{{ log.actor_type }}</span></td>
+          <td>{{ log.action }}</td>
+          <td class="text-muted small">{{ log.details or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{{ url_for('admin.audit_log') }}" class="btn btn-secondary btn-sm">View Full Audit Log</a>
+  </div>
+
+  <div class="quick-admin-links mt-2">
+    <a href="{{ url_for('admin.constituencies') }}" class="admin-card">🗺️ Constituencies</a>
+    <a href="{{ url_for('admin.parties') }}" class="admin-card">🏛️ Parties</a>
+    <a href="{{ url_for('admin.elections') }}" class="admin-card">🗳️ Elections</a>
+    <a href="{{ url_for('admin.audit_log') }}" class="admin-card">📋 Audit Log</a>
+  </div>
+</div>
+{% endblock %}
+

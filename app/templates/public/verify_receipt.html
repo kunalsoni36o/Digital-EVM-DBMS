@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Verify Receipt{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <h1 class="page-title">🔍 Verify Your Vote Receipt</h1>
+  <p class="page-desc">
+    Enter your 16-character receipt code to confirm your ballot was recorded.
+    This check <strong>never</strong> reveals your identity or your choice.
+  </p>
+
+  <div class="card">
+    <form method="post" action="{{ url_for('public.verify_receipt') }}">
+      {{ csrf_field() }}
+      <div class="form-group">
+        <label for="receipt_code">Receipt Code</label>
+        <input type="text" id="receipt_code" name="receipt_code"
+               maxlength="16" placeholder="e.g. A1B2C3D4E5F6G7H8"
+               class="form-control monospace"
+               autocomplete="off" required>
+        <span class="form-hint">16 characters, letters and numbers (case-insensitive).</span>
+      </div>
+      <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
+  </div>
+
+  {% if searched %}
+    <div class="card mt-2">
+      {% if result %}
+        <div class="alert alert-success">
+          <strong>✅ Valid Receipt</strong><br>
+          Election: <strong>{{ result.election_title }}</strong><br>
+          Cast at: <strong>{{ result.cast_at.strftime('%d %b %Y, %I:%M %p') if result.cast_at else '—' }}</strong>
+        </div>
+        <p class="text-muted">Your vote has been recorded. No further details are available to protect ballot secrecy.</p>
+      {% else %}
+        <div class="alert alert-error">
+          <strong>❌ Not Found</strong> — No vote exists with that receipt code.
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

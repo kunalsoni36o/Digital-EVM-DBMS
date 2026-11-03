@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Vote Receipt{% endblock %}
+{% block content %}
+<div class="container page-narrow">
+  <div class="card receipt-card">
+    <div class="receipt-header">
+      <span class="receipt-icon">🧾</span>
+      <h1>Vote Recorded Successfully</h1>
+      {% if election %}<p class="text-muted">{{ election.title }}</p>{% endif %}
+    </div>
+
+    <div class="receipt-code-box">
+      <label>Your Receipt Code</label>
+      <span class="receipt-code monospace">{{ receipt_code }}</span>
+    </div>
+
+    <div class="alert alert-warning mt-2">
+      <strong>⚠️ Save this code now!</strong><br>
+      This receipt is shown <strong>only once</strong> and cannot be retrieved later.
+      Use it at <a href="{{ url_for('public.verify_receipt') }}">Verify Receipt</a> to confirm your ballot was counted.
+    </div>
+
+    <p class="receipt-note">
+      This code proves your vote was recorded. It does <strong>not</strong> reveal who you are or who you voted for.
+    </p>
+
+    <div class="receipt-actions">
+      <a href="{{ url_for('voter.dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
