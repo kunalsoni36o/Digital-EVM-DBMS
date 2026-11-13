@@ -1,5 +1,9 @@
 # Digi EVM: E-Voting Management System
 
+## Project Summary
+
+Digi EVM is a coursework web application for managing elections and casting votes online. Voters can register, sign in, access an eligible ballot, cast one vote, and verify a receipt code. Administrators approve voters, manage constituencies, parties, candidates, and election timelines, review audit activity, and publish results. The Flask application uses parameterized SQL with MySQL, while database constraints and triggers enforce election rules and preserve the separation between voter participation and ballot choice. The interface uses responsive HTML, CSS, and vanilla JavaScript. This is a demonstration project, not a certified system for real elections.
+
 A secure, transparent, digital e-voting management web application built for a DBMS coursework mini-project using **MySQL 8**, **Python 3.10+ (Flask)**, and **PyMySQL** with raw parameterized SQL.
 
 ---

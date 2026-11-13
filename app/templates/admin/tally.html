@@ -2,7 +2,7 @@
 {% block title %}Live Tally – {{ election.title }}{% endblock %}
 {% block content %}
 <div class="container">
-  <h1 class="page-title">📊 Live Tally: {{ election.title }}</h1>
+  <h1 class="page-title">Live Tally: {{ election.title }}</h1>
   <p><span class="badge badge-{{ election.status }}">{{ election.status|title }}</span></p>
 
   {% if turnout %}

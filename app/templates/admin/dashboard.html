@@ -2,7 +2,7 @@
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
 <div class="container">
-  <h1 class="page-title">⚙️ Admin Dashboard</h1>
+  <h1 class="page-title">Admin Dashboard</h1>
 
   <div class="stats-grid">
     <div class="stat-card">
@@ -48,10 +48,10 @@
   </div>
 
   <div class="quick-admin-links mt-2">
-    <a href="{{ url_for('admin.constituencies') }}" class="admin-card">🗺️ Constituencies</a>
-    <a href="{{ url_for('admin.parties') }}" class="admin-card">🏛️ Parties</a>
-    <a href="{{ url_for('admin.elections') }}" class="admin-card">🗳️ Elections</a>
-    <a href="{{ url_for('admin.audit_log') }}" class="admin-card">📋 Audit Log</a>
+    <a href="{{ url_for('admin.constituencies') }}" class="admin-card">Constituencies</a>
+    <a href="{{ url_for('admin.parties') }}" class="admin-card">Political Parties</a>
+    <a href="{{ url_for('admin.elections') }}" class="admin-card">Elections</a>
+    <a href="{{ url_for('admin.audit_log') }}" class="admin-card">Audit Log</a>
   </div>
 </div>
 {% endblock %}

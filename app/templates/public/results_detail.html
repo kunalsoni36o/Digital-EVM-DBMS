@@ -28,7 +28,7 @@
       <tbody>
         {% for row in data.candidates %}
         <tr class="{{ 'winner-row' if row.pos == 1 }}">
-          <td>{{ '🏆' if row.pos == 1 else row.pos }}</td>
+          <td>{{ 'Winner' if row.pos == 1 else row.pos }}</td>
           <td>{{ row.candidate_name }}</td>
           <td><span class="badge">{{ row.party }}</span></td>
           <td><strong>{{ row.votes }}</strong></td>

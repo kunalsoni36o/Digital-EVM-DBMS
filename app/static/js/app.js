@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pwStrength.textContent = 'Strength: Medium';
       } else {
         pwStrength.classList.add('strong');
-        pwStrength.textContent = 'Strength: Strong ✓';
+        pwStrength.textContent = 'Strength: Strong';
       }
     });
   }

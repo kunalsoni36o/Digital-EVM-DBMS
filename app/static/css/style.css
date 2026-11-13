@@ -556,3 +556,49 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .footer-inner { max-width: 1100px; margin: 0 auto; }
 .footer-note { margin-top: 0.25rem; font-size: 0.78rem; opacity: 0.6; }
 
+/* ---- Refined civic identity -------------------------------- */
+:root {
+  --clr-primary: #176b5b;
+  --clr-primary-dark: #105447;
+  --clr-primary-light: #eaf3f0;
+  --clr-bg: #f4f5f2;
+  --clr-surface: #fff;
+  --clr-border: #d9dfda;
+  --clr-text: #202a27;
+  --clr-muted: #687570;
+  --clr-nav-bg: #172521;
+  --clr-nav-text: #f3f5f2;
+  --radius: 0.35rem;
+  --shadow: 0 2px 10px rgba(25, 43, 36, .045);
+  --shadow-md: 0 8px 24px rgba(25, 43, 36, .10);
+  --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+body { background-image: linear-gradient(180deg, #f8f9f6 0, var(--clr-bg) 24rem); }
+.navbar { padding: .9rem max(1.25rem, calc((100vw - 1160px) / 2)); box-shadow: 0 1px 0 rgba(255,255,255,.08); }
+.nav-brand a { letter-spacing: .04em; font-size: 1.15rem; }
+.nav-toggle { width: 2.25rem; padding: .35rem; }
+.nav-toggle span { display: block; height: 2px; margin: 4px 0; background: currentColor; }
+.main-content { padding-top: 2rem; padding-bottom: 2.5rem; }
+.page-title { letter-spacing: -.025em; font-weight: 650; }
+.card, .stat-card, .feature-card, .quick-link-card, .admin-card { border-radius: .4rem; box-shadow: var(--shadow); }
+.card { padding: 1.5rem; }
+.btn { border-radius: .3rem; letter-spacing: .01em; }
+.btn-primary { background: var(--clr-primary); }
+.btn-primary:hover { background: var(--clr-primary-dark); opacity: 1; }
+.hero { background: radial-gradient(ellipse at 78% 18%, rgba(127,173,151,.2), transparent 34%), linear-gradient(120deg, #172923, #21483d); padding: 5.25rem 1.5rem 5rem; }
+.hero-inner { max-width: 800px; margin: auto; }
+.hero-kicker { color: #b9d2c7; text-transform: uppercase; letter-spacing: .17em; font-size: .76rem; font-weight: 700; margin-bottom: .9rem; }
+.hero-title { font-size: clamp(2.6rem, 7vw, 4rem); letter-spacing: -.04em; }
+.hero-subtitle { max-width: 620px; margin: 0 auto 2rem; color: rgba(255,255,255,.78); }
+.features { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+.section-title { letter-spacing: -.025em; }
+.feature-card { text-align: left; padding: 1.5rem; }
+.feature-icon { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border-radius: 50%; background: var(--clr-primary-light); color: var(--clr-primary); font-size: .72rem; font-weight: 750; margin-bottom: 1.2rem; }
+.feature-card h3 { font-size: 1rem; }
+.quick-links { background: #e9eeea; }
+.quick-link-card { color: var(--clr-text); border-color: #d4ddd6; }
+.candidate-card:has(input:checked) { background: #edf5f1; box-shadow: 0 0 0 2px rgba(23,107,91,.14); }
+.receipt-icon { font-size: .78rem; letter-spacing: .16em; font-weight: 700; color: var(--clr-primary); }
+.footer { background: #172521; }
+@media (max-width: 768px) { .navbar { padding: .75rem 1rem; } .main-content { padding-top: 1.25rem; } .hero { padding: 3.5rem 1.25rem; } }
+

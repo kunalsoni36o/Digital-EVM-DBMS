@@ -2,7 +2,7 @@
 {% block title %}Verify Receipt{% endblock %}
 {% block content %}
 <div class="container page-narrow">
-  <h1 class="page-title">🔍 Verify Your Vote Receipt</h1>
+  <h1 class="page-title">Verify Your Vote Receipt</h1>
   <p class="page-desc">
     Enter your 16-character receipt code to confirm your ballot was recorded.
     This check <strong>never</strong> reveals your identity or your choice.
@@ -27,14 +27,14 @@
     <div class="card mt-2">
       {% if result %}
         <div class="alert alert-success">
-          <strong>✅ Valid Receipt</strong><br>
+          <strong>Valid Receipt</strong><br>
           Election: <strong>{{ result.election_title }}</strong><br>
           Cast at: <strong>{{ result.cast_at.strftime('%d %b %Y, %I:%M %p') if result.cast_at else '—' }}</strong>
         </div>
         <p class="text-muted">Your vote has been recorded. No further details are available to protect ballot secrecy.</p>
       {% else %}
         <div class="alert alert-error">
-          <strong>❌ Not Found</strong> — No vote exists with that receipt code.
+          <strong>Not Found</strong> — No vote exists with that receipt code.
         </div>
       {% endif %}
     </div>

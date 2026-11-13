@@ -21,7 +21,7 @@
             </p>
           </div>
           {% if el.has_voted %}
-            <span class="badge badge-success">✅ Already Voted</span>
+            <span class="badge badge-success">Already Voted</span>
           {% else %}
             <a href="{{ url_for('voter.ballot', election_id=el.election_id) }}" class="btn btn-primary">Vote Now</a>
           {% endif %}

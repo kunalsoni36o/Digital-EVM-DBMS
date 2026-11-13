@@ -2,7 +2,7 @@
 {% block title %}Published Results{% endblock %}
 {% block content %}
 <div class="container">
-  <h1 class="page-title">📋 Election Results</h1>
+  <h1 class="page-title">Election Results</h1>
 
   {% if elections %}
     <div class="card-list">
@@ -19,7 +19,7 @@
     </div>
   {% else %}
     <div class="empty-state">
-      <span class="empty-icon">📭</span>
+      <span class="empty-icon" aria-hidden="true">—</span>
       <p>No results have been published yet.</p>
     </div>
   {% endif %}
